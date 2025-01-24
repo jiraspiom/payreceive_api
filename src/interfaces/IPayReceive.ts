@@ -1,7 +1,9 @@
 type Valores = {
-  id: string
-  value: string
+  id?: string
+  value: number
+  status: 'pending' | 'completed' | 'failed'
   date?: Date
+  updateAt?: Date
 }
 
 export interface IPay extends Valores {

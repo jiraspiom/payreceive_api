@@ -1,40 +1,51 @@
-import { db } from '../config/firebaseConfig.js'
+import { Status } from '@prisma/client'
 import type {
   IPaymentService,
-  Payment,
   PaymentUpdate,
 } from '../interfaces/IPaymentService.js'
+import type { IPay } from '../interfaces/IPayReceive.js'
+import { prisma } from '../lib/db.js'
 
 export class PaymentService implements IPaymentService {
-  async create(description: string, amount: number): Promise<string> {
-    const paymentRef = db.collection('payments').doc()
+  async create(pay: string, value: number): Promise<string> {
     const paymentData = {
-      description,
-      amount,
-      status: 'pending',
-      createdAt: new Date(),
+      pay,
+      value,
+      status: Status.pending,
     }
-    await paymentRef.set(paymentData)
-    return paymentRef.id
+
+    const create = await prisma.pay.create({ data: paymentData })
+
+    return create.id
   }
 
-  async findById(paymentId: string): Promise<Payment> {
-    const paymentDoc = await db.collection('payments').doc(paymentId).get()
-    if (!paymentDoc.exists) {
+  async findAll(): Promise<IPay[]> {
+    const all = await prisma.pay.findMany()
+
+    if (!all) {
+      throw new Error('Pagamentos não encontrado')
+    }
+
+    return all
+  }
+
+  async findById(paymentId: string): Promise<IPay> {
+    const pay = await prisma.pay.findUnique({ where: { id: paymentId } })
+
+    if (!pay) {
       throw new Error('Pagamento não encontrado')
     }
-    return paymentDoc.data() as Payment // Fazemos um cast para garantir o tipo
+    return pay
   }
 
   async update(
     paymentId: string,
-    status: 'pending' | 'completed' | 'failed'
+    status: 'pending' | 'completed' | 'failed',
+    dados: IPay
   ): Promise<PaymentUpdate> {
-    const paymentRef = db.collection('payments').doc(paymentId)
+    const pay = await prisma.pay.findUnique({ where: { id: paymentId } })
 
-    const paymentDoc = await paymentRef.get()
-
-    if (!paymentDoc.exists) {
+    if (!pay) {
       throw new Error('Pagamento não encontrado')
     }
 
@@ -42,17 +53,25 @@ export class PaymentService implements IPaymentService {
       status,
       updatedAt: new Date(),
     }
-    await paymentRef.update(updateData)
+    await prisma.pay.update({
+      where: { id: pay.id },
+      data: {
+        pay: dados.pay,
+        value: dados.value,
+        date: dados.date,
+        updatedAt: new Date(),
+      },
+    })
 
     return updateData
   }
 
   async delete(paymentId: string): Promise<void> {
-    const paymentRef = db.collection('payments').doc(paymentId)
-    const paymentDoc = await paymentRef.get()
-    if (!paymentDoc.exists) {
+    const payment = await prisma.pay.findUnique({ where: { id: paymentId } })
+
+    if (!payment) {
       throw new Error('Pagamento não encontrado')
     }
-    await paymentRef.delete()
+    await prisma.pay.delete({ where: { id: payment.id } })
   }
 }

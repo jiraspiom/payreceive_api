@@ -1,11 +1,4 @@
-export interface Payment {
-  id?: string // Opcional, pois pode ser gerado pelo Firebase
-  text: string
-  value: number
-  status: 'pending' | 'completed' | 'failed'
-  createdAt: Date
-  updatedAt?: Date // Opcional, pois pode não ser atualizado imediatamente
-}
+import type { IPay } from './IPayReceive.js'
 
 export interface PaymentUpdate {
   status: 'pending' | 'completed' | 'failed'
@@ -13,11 +6,17 @@ export interface PaymentUpdate {
 }
 
 export interface IPaymentService {
-  create(description: string, amount: number): Promise<string>
-  findById(paymentId: string): Promise<Payment>
+  create(pay: string, value: number): Promise<string>
+
+  findAll(): Promise<IPay[]>
+
+  findById(payId: string): Promise<IPay>
+
   update(
     paymentId: string,
-    status: 'pending' | 'completed' | 'failed'
+    status: 'pending' | 'completed' | 'failed',
+    dados: IPay
   ): Promise<PaymentUpdate>
+
   delete(paymentId: string): Promise<void>
 }

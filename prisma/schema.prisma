@@ -10,22 +10,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model pay {
-  id    String   @id @default(cuid())
-  text  String?
-  value String?
-  date  DateTime @default(now())
+enum Status {
+  pending
+  completed
+  failed
+}
 
-  createAt DateTime  @default(now())
-  updateAt DateTime?
+model pay {
+  id     String   @id @default(cuid())
+  pay    String
+  value  Int
+  date   DateTime @default(now())
+  status Status
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
 }
 
 model receive {
-  id    String   @id @default(uuid())
-  text  String?
-  value String?
-  date  DateTime @default(now())
+  id      String   @id @default(uuid())
+  receive String
+  value   Int
+  date    DateTime @default(now())
+  status  Status
 
-  createAt DateTime  @default(now())
-  updateAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
 }
