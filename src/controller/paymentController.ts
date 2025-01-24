@@ -19,7 +19,7 @@ export class PaymentController {
     console.log('okkk', body)
 
     try {
-      this.logger.log('fetching user create')
+      this.logger.log('fetching payment create')
       const payid = await this.paymentService.create(body.pay, body.value)
 
       return ctx.json(
@@ -35,7 +35,7 @@ export class PaymentController {
     const paymentId = await ctx.req.param('id')
 
     try {
-      this.logger.log(`fetching user with ID: ${paymentId}`)
+      this.logger.log(`fetching payment find ID: ${paymentId}`)
       const payment = await this.paymentService.findById(paymentId)
 
       return ctx.json(sendResponse(200, 'Pagamento encontrado', payment), 200)
@@ -46,7 +46,7 @@ export class PaymentController {
 
   findAll = async (ctx: Context) => {
     try {
-      this.logger.log('fetching user All')
+      this.logger.log('fetching payment All')
 
       const payments = await this.paymentService.findAll()
 
@@ -62,7 +62,7 @@ export class PaymentController {
     const body = await ctx.req.json<IPay>()
 
     try {
-      this.logger.log(`fetching user with ID: ${paymentId}`)
+      this.logger.log(`fetching payment update ID: ${paymentId}`)
       const updatedPayment = await this.paymentService.update(
         paymentId,
         'completed',
@@ -82,7 +82,7 @@ export class PaymentController {
     const paymentId = await ctx.req.param('id')
 
     try {
-      this.logger.log(`fetching user with ID: ${paymentId}`)
+      this.logger.log(`fetching payment delete ID: ${paymentId}`)
       await this.paymentService.delete(paymentId)
 
       return ctx.json(sendResponse(200, 'Pagamento deletado com sucesso'), 200)

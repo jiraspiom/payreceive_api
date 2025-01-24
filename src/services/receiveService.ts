@@ -1,6 +1,5 @@
 import { Status } from '@prisma/client'
-import type { PaymentUpdate } from '../interfaces/IPaymentService.js'
-import type { IPay, IReceive } from '../interfaces/IPayReceive.js'
+import type { IReceive } from '../interfaces/IPayReceive.js'
 import { prisma } from '../lib/db.js'
 import type {
   IReceiveService,
@@ -8,14 +7,14 @@ import type {
 } from '../interfaces/IReceiveService.js'
 
 export class ReceiveService implements IReceiveService {
-  async create(pay: string, value: number): Promise<string> {
+  async create(receive: string, value: number): Promise<string> {
     const paymentData = {
-      pay,
+      receive,
       value,
       status: Status.pending,
     }
 
-    const create = await prisma.pay.create({ data: paymentData })
+    const create = await prisma.receive.create({ data: paymentData })
 
     return create.id
   }
@@ -54,10 +53,10 @@ export class ReceiveService implements IReceiveService {
       status,
       updatedAt: new Date(),
     }
-    await prisma.pay.update({
+    await prisma.receive.update({
       where: { id: receive.id },
       data: {
-        pay: dados.receive,
+        receive: dados.receive,
         value: dados.value,
         date: dados.date,
         updatedAt: new Date(),
@@ -73,6 +72,6 @@ export class ReceiveService implements IReceiveService {
     if (!dado) {
       throw new Error('Recebimento não encontrado')
     }
-    await prisma.pay.delete({ where: { id: dado.id } })
+    await prisma.receive.delete({ where: { id: dado.id } })
   }
 }
