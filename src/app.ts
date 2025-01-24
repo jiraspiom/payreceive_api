@@ -1,17 +1,15 @@
 import { Hono } from 'hono'
-import { UserController } from './controller/UserController.js'
-import { userRoutes } from './routes/userRoutes.js'
 import { ConsoleLogger } from './services/LoggerService.js'
 import { UserService } from './services/UserService.js'
 import { errorHandler } from './middlewares/ErrorHandle.js'
 import type { IPay, IReceive } from './interfaces/IPayReceive.js'
-import { DataPay, DataReceive } from './services/payrecevierData.js'
-import { GearIdAleatorio } from './util/gerarIdAleatorio.js'
+import { DataPay, DataReceive } from './util/payrecevierData.js'
+import { GearIdAleatorio } from './util/GerarIdAleatorio.js'
+import { payRouter } from './routes/paymentRoutes.js'
 
 // Instanciar dependências
 const logger = new ConsoleLogger()
 const userService = new UserService()
-const userController = new UserController(userService, logger)
 
 const app = new Hono().basePath('/api')
 
@@ -59,7 +57,7 @@ app.post('/receive', async c => {
   return c.json({ msg: 'receive insert', receive })
 })
 
-app.route('/users', userRoutes(userController))
+app.route('/pa', payRouter)
 
 app.onError(errorHandler(logger))
 
