@@ -1,0 +1,19 @@
+-- CreateTable
+CREATE TABLE "pay" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "text" TEXT,
+    "value" TEXT,
+    "date" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updateAt" DATETIME
+);
+
+-- CreateTable
+CREATE TABLE "receive" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "text" TEXT,
+    "value" TEXT,
+    "date" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updateAt" DATETIME
+);
