@@ -15,7 +15,7 @@ app.use(
   cors({
     origin: ['http://localhost:3000', '*', '0.0.0.0'],
     allowHeaders: ['Content-Type', 'Authorization'],
-    allowMethods: ['GET', 'POST', 'OPTIONS'],
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     exposeHeaders: ['Content-Length'],
     maxAge: 600,
     credentials: false,
