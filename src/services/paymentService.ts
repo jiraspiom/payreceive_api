@@ -11,8 +11,9 @@ export class PaymentService implements IPaymentService {
     const paymentData = {
       pay,
       value,
-      status: Status.pending,
+      status: Status.completed,
     }
+    console.log('serviceopay', paymentData)
 
     const create = await prisma.pay.create({ data: paymentData })
 

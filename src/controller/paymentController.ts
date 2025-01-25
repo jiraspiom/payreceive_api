@@ -16,7 +16,7 @@ export class PaymentController {
 
   create = async (ctx: Context) => {
     const body = await ctx.req.json<IPay>()
-    console.log('okkk', body)
+    console.log('okkkPag', body)
 
     try {
       this.logger.log('fetching payment create')
