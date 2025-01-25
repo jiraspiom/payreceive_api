@@ -32,10 +32,12 @@ export class PaymentService implements IPaymentService {
 
     if (ano !== undefined && mes !== undefined) {
       whereClause.date = {
-        gte: new Date(ano, mes - 1, 1), // Primeiro dia do mês
-        lt: new Date(ano, mes, 0), // Último dia do mês
+        gte: new Date(ano, mes - 1, 1),
+        lt: new Date(ano, mes, 0),
       }
     }
+
+    console.log('whereClause', whereClause)
 
     const all = await prisma.pay.findMany({
       where: Object.keys(whereClause).length > 0 ? whereClause : undefined,

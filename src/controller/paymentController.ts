@@ -49,10 +49,15 @@ export class PaymentController {
     const mes = await ctx.req.query('mes')
     const ano = await ctx.req.query('ano')
 
+    const cDate = new Date()
+
     try {
       this.logger.log('fetching payment All')
 
-      const all = await this.paymentService.findAll(Number(ano), Number(mes))
+      const all = await this.paymentService.findAll(
+        Number(ano) || cDate.getFullYear(),
+        Number(mes) || cDate.getMonth() + 1
+      )
 
       return ctx.json(sendResponse(200, 'Pagamento encontrado', all), 200)
     } catch (error) {

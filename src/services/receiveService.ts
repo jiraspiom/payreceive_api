@@ -22,12 +22,17 @@ export class ReceiveService implements IReceiveService {
   async findAll(ano?: number, mes?: number): Promise<IPayReceive[]> {
     const whereClause: { date?: { gte?: Date; lt?: Date } } = {}
 
+    console.log('ano', ano, 'mes', mes)
+
     if (ano !== undefined && mes !== undefined) {
       whereClause.date = {
-        gte: new Date(ano, mes - 1, 1), // Primeiro dia do mês
-        lt: new Date(ano, mes, 0), // Último dia do mês
+        gte: new Date(ano, mes - 1, 1),
+        lt: new Date(ano, mes, 0),
       }
     }
+
+    console.log('whereClause', whereClause)
+
     const all = await prisma.receive.findMany({
       where: Object.keys(whereClause).length > 0 ? whereClause : undefined,
     })

@@ -47,10 +47,15 @@ export class ReceiveController {
     const mes = await ctx.req.query('mes')
     const ano = await ctx.req.query('ano')
 
-    try {
-      this.logger.log('fetching receive All')
+    const cDate = new Date()
 
-      const rec = await this.receiveService.findAll(Number(ano), Number(mes))
+    try {
+      this.logger.log(`fetching receive All ${mes} ${ano}`)
+
+      const rec = await this.receiveService.findAll(
+        Number(ano) || cDate.getFullYear(),
+        Number(mes) || cDate.getMonth() + 1
+      )
 
       return ctx.json(sendResponse(200, 'receitas encontrada', rec), 200)
     } catch (error) {
