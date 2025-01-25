@@ -44,10 +44,13 @@ export class ReceiveController {
   }
 
   findAll = async (ctx: Context) => {
+    const mes = await ctx.req.query('mes')
+    const ano = await ctx.req.query('ano')
+
     try {
       this.logger.log('fetching receive All')
 
-      const rec = await this.receiveService.findAll()
+      const rec = await this.receiveService.findAll(Number(ano), Number(mes))
 
       return ctx.json(sendResponse(200, 'receitas encontrada', rec), 200)
     } catch (error) {

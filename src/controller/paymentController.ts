@@ -46,10 +46,13 @@ export class PaymentController {
   }
 
   findAll = async (ctx: Context) => {
+    const mes = await ctx.req.query('mes')
+    const ano = await ctx.req.query('ano')
+
     try {
       this.logger.log('fetching payment All')
 
-      const all = await this.paymentService.findAll()
+      const all = await this.paymentService.findAll(Number(ano), Number(mes))
 
       return ctx.json(sendResponse(200, 'Pagamento encontrado', all), 200)
     } catch (error) {

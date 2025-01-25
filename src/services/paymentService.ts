@@ -27,8 +27,19 @@ export class PaymentService implements IPaymentService {
     }
   }
 
-  async findAll(): Promise<IPayReceive[]> {
-    const all = await prisma.pay.findMany()
+  async findAll(ano?: number, mes?: number): Promise<IPayReceive[]> {
+    const whereClause: { date?: { gte?: Date; lt?: Date } } = {}
+
+    if (ano !== undefined && mes !== undefined) {
+      whereClause.date = {
+        gte: new Date(ano, mes - 1, 1), // Primeiro dia do mês
+        lt: new Date(ano, mes, 0), // Último dia do mês
+      }
+    }
+
+    const all = await prisma.pay.findMany({
+      where: Object.keys(whereClause).length > 0 ? whereClause : undefined,
+    })
 
     if (!all) {
       throw new Error('Pagamentos não encontrado')

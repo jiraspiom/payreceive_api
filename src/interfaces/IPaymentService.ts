@@ -8,7 +8,7 @@ export interface PaymentUpdate {
 export interface IPaymentService {
   create(text: string, value: number): Promise<string | undefined>
 
-  findAll(): Promise<IPayReceive[]>
+  findAll(ano?: number, mes?: number): Promise<IPayReceive[]>
 
   findById(id: string): Promise<IPayReceive>
 
