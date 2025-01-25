@@ -2,7 +2,7 @@ import { sendResponse } from '../util/apiResponse.js'
 import type { Context } from 'hono'
 import type { IPaymentService } from '../interfaces/IPaymentService.js'
 
-import type { IPay } from '../interfaces/IPayReceive.js'
+import type { IPayReceive } from '../interfaces/IPayReceive.js'
 import type { ILogger } from '../interfaces/ILogger.js'
 
 export class PaymentController {
@@ -15,12 +15,12 @@ export class PaymentController {
   }
 
   create = async (ctx: Context) => {
-    const body = await ctx.req.json<IPay>()
+    const body = await ctx.req.json<IPayReceive>()
     console.log('okkkPag', body)
 
     try {
       this.logger.log('fetching payment create')
-      const payid = await this.paymentService.create(body.pay, body.value)
+      const payid = await this.paymentService.create(body.text, body.value)
 
       return ctx.json(
         sendResponse(201, 'Pagamento criado com sucesso!', { payid }),
@@ -32,11 +32,11 @@ export class PaymentController {
   }
 
   findById = async (ctx: Context) => {
-    const paymentId = await ctx.req.param('id')
+    const id = await ctx.req.param('id')
 
     try {
-      this.logger.log(`fetching payment find ID: ${paymentId}`)
-      const payment = await this.paymentService.findById(paymentId)
+      this.logger.log(`fetching payment find ID: ${id}`)
+      const payment = await this.paymentService.findById(id)
 
       return ctx.json(sendResponse(200, 'Pagamento encontrado', payment), 200)
     } catch (error) {
@@ -48,29 +48,25 @@ export class PaymentController {
     try {
       this.logger.log('fetching payment All')
 
-      const payments = await this.paymentService.findAll()
+      const all = await this.paymentService.findAll()
 
-      return ctx.json(sendResponse(200, 'Pagamento encontrado', payments), 200)
+      return ctx.json(sendResponse(200, 'Pagamento encontrado', all), 200)
     } catch (error) {
       return ctx.json(sendResponse(404, 'Pagamento não encontrado'), 404)
     }
   }
 
   update = async (ctx: Context) => {
-    const paymentId = ctx.req.param('id')
+    const id = ctx.req.param('id')
 
-    const body = await ctx.req.json<IPay>()
+    const body = await ctx.req.json<IPayReceive>()
 
     try {
-      this.logger.log(`fetching payment update ID: ${paymentId}`)
-      const updatedPayment = await this.paymentService.update(
-        paymentId,
-        'completed',
-        body
-      )
+      this.logger.log(`fetching payment update ID: ${id}`)
+      const updated = await this.paymentService.update(id, 'completed', body)
 
       return ctx.json(
-        sendResponse(200, 'Pagamento atualizado com sucesso', updatedPayment),
+        sendResponse(200, 'Pagamento atualizado com sucesso', updated),
         200
       )
     } catch (error) {
@@ -79,11 +75,11 @@ export class PaymentController {
   }
 
   delete = async (ctx: Context) => {
-    const paymentId = await ctx.req.param('id')
+    const id = await ctx.req.param('id')
 
     try {
-      this.logger.log(`fetching payment delete ID: ${paymentId}`)
-      await this.paymentService.delete(paymentId)
+      this.logger.log(`fetching payment delete ID: ${id}`)
+      await this.paymentService.delete(id)
 
       return ctx.json(sendResponse(200, 'Pagamento deletado com sucesso'), 200)
     } catch (error) {

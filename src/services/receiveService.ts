@@ -1,5 +1,5 @@
 import { Status } from '@prisma/client'
-import type { IReceive } from '../interfaces/IPayReceive.js'
+import type { IPayReceive } from '../interfaces/IPayReceive.js'
 import { prisma } from '../lib/db.js'
 import type {
   IReceiveService,
@@ -7,19 +7,19 @@ import type {
 } from '../interfaces/IReceiveService.js'
 
 export class ReceiveService implements IReceiveService {
-  async create(receive: string, value: number): Promise<string> {
-    const paymentData = {
-      receive,
+  async create(text: string, value: number): Promise<string> {
+    const data = {
+      text,
       value,
       status: Status.pending,
     }
 
-    const create = await prisma.receive.create({ data: paymentData })
+    const create = await prisma.receive.create({ data: data })
 
     return create.id
   }
 
-  async findAll(): Promise<IReceive[]> {
+  async findAll(): Promise<IPayReceive[]> {
     const all = await prisma.receive.findMany()
 
     if (!all) {
@@ -29,23 +29,23 @@ export class ReceiveService implements IReceiveService {
     return all
   }
 
-  async findById(Id: string): Promise<IReceive> {
-    const receive = await prisma.receive.findUnique({ where: { id: Id } })
+  async findById(Id: string): Promise<IPayReceive> {
+    const data = await prisma.receive.findUnique({ where: { id: Id } })
 
-    if (!receive) {
+    if (!data) {
       throw new Error('Pagamento não encontrado')
     }
-    return receive
+    return data
   }
 
   async update(
-    Id: string,
+    id: string,
     status: 'pending' | 'completed' | 'failed',
-    dados: IReceive
+    payrec: IPayReceive
   ): Promise<ReceiveUpdate> {
-    const receive = await prisma.receive.findUnique({ where: { id: Id } })
+    const data = await prisma.receive.findUnique({ where: { id: id } })
 
-    if (!receive) {
+    if (!data) {
       throw new Error('Pagamento não encontrado')
     }
 
@@ -54,11 +54,11 @@ export class ReceiveService implements IReceiveService {
       updatedAt: new Date(),
     }
     await prisma.receive.update({
-      where: { id: receive.id },
+      where: { id: data.id },
       data: {
-        receive: dados.receive,
-        value: dados.value,
-        date: dados.date,
+        text: payrec.text,
+        value: payrec.value,
+        date: payrec.date,
         updatedAt: new Date(),
       },
     })
@@ -66,12 +66,12 @@ export class ReceiveService implements IReceiveService {
     return updateData
   }
 
-  async delete(Id: string): Promise<void> {
-    const dado = await prisma.receive.findUnique({ where: { id: Id } })
+  async delete(id: string): Promise<void> {
+    const data = await prisma.receive.findUnique({ where: { id: id } })
 
-    if (!dado) {
+    if (!data) {
       throw new Error('Recebimento não encontrado')
     }
-    await prisma.receive.delete({ where: { id: dado.id } })
+    await prisma.receive.delete({ where: { id: data.id } })
   }
 }

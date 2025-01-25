@@ -1,4 +1,4 @@
-import type { IPay } from './IPayReceive.js'
+import type { IPayReceive } from './IPayReceive.js'
 
 export interface PaymentUpdate {
   status: 'pending' | 'completed' | 'failed'
@@ -6,17 +6,17 @@ export interface PaymentUpdate {
 }
 
 export interface IPaymentService {
-  create(pay: string, value: number): Promise<string>
+  create(text: string, value: number): Promise<string>
 
-  findAll(): Promise<IPay[]>
+  findAll(): Promise<IPayReceive[]>
 
-  findById(payId: string): Promise<IPay>
+  findById(id: string): Promise<IPayReceive>
 
   update(
-    paymentId: string,
+    id: string,
     status: 'pending' | 'completed' | 'failed',
-    dados: IPay
+    payrec: IPayReceive
   ): Promise<PaymentUpdate>
 
-  delete(paymentId: string): Promise<void>
+  delete(id: string): Promise<void>
 }

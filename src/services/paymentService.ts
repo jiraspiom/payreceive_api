@@ -3,24 +3,27 @@ import type {
   IPaymentService,
   PaymentUpdate,
 } from '../interfaces/IPaymentService.js'
-import type { IPay } from '../interfaces/IPayReceive.js'
+import type { IPayReceive } from '../interfaces/IPayReceive.js'
 import { prisma } from '../lib/db.js'
 
 export class PaymentService implements IPaymentService {
-  async create(pay: string, value: number): Promise<string> {
-    const paymentData = {
-      pay,
+  async create(text: string, value: number): Promise<string> {
+    const data = {
+      text,
       value,
       status: Status.completed,
     }
-    console.log('serviceopay', paymentData)
 
-    const create = await prisma.pay.create({ data: paymentData })
+    console.log('service opay', data)
+
+    const create = await prisma.pay.create({ data: data })
+
+    console.log('criado', create)
 
     return create.id
   }
 
-  async findAll(): Promise<IPay[]> {
+  async findAll(): Promise<IPayReceive[]> {
     const all = await prisma.pay.findMany()
 
     if (!all) {
@@ -30,23 +33,23 @@ export class PaymentService implements IPaymentService {
     return all
   }
 
-  async findById(paymentId: string): Promise<IPay> {
-    const pay = await prisma.pay.findUnique({ where: { id: paymentId } })
+  async findById(id: string): Promise<IPayReceive> {
+    const data = await prisma.pay.findUnique({ where: { id: id } })
 
-    if (!pay) {
+    if (!data) {
       throw new Error('Pagamento não encontrado')
     }
-    return pay
+    return data
   }
 
   async update(
-    paymentId: string,
+    id: string,
     status: 'pending' | 'completed' | 'failed',
-    dados: IPay
+    payrec: IPayReceive
   ): Promise<PaymentUpdate> {
-    const pay = await prisma.pay.findUnique({ where: { id: paymentId } })
+    const data = await prisma.pay.findUnique({ where: { id: id } })
 
-    if (!pay) {
+    if (!data) {
       throw new Error('Pagamento não encontrado')
     }
 
@@ -55,11 +58,11 @@ export class PaymentService implements IPaymentService {
       updatedAt: new Date(),
     }
     await prisma.pay.update({
-      where: { id: pay.id },
+      where: { id: id },
       data: {
-        pay: dados.pay,
-        value: dados.value,
-        date: dados.date,
+        text: payrec.text,
+        value: payrec.value,
+        date: payrec.date,
         updatedAt: new Date(),
       },
     })
@@ -67,12 +70,12 @@ export class PaymentService implements IPaymentService {
     return updateData
   }
 
-  async delete(paymentId: string): Promise<void> {
-    const payment = await prisma.pay.findUnique({ where: { id: paymentId } })
+  async delete(id: string): Promise<void> {
+    const data = await prisma.pay.findUnique({ where: { id: id } })
 
-    if (!payment) {
+    if (!data) {
       throw new Error('Pagamento não encontrado')
     }
-    await prisma.pay.delete({ where: { id: payment.id } })
+    await prisma.pay.delete({ where: { id: data.id } })
   }
 }

@@ -6,10 +6,6 @@ type Valores = {
   updateAt?: Date
 }
 
-export interface IPay extends Valores {
-  pay: string
-}
-
-export interface IReceive extends Valores {
-  receive: string
+export interface IPayReceive extends Valores {
+  text: string
 }

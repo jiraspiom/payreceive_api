@@ -1,7 +1,7 @@
 import { sendResponse } from '../util/apiResponse.js'
 import type { Context } from 'hono'
 import type { ILogger } from '../interfaces/ILogger.js'
-import type { IReceive } from '../interfaces/IPayReceive.js'
+import type { IPayReceive } from '../interfaces/IPayReceive.js'
 import type { IReceiveService } from '../interfaces/IReceiveService.js'
 
 export class ReceiveController {
@@ -14,12 +14,12 @@ export class ReceiveController {
   }
 
   create = async (ctx: Context) => {
-    const body = await ctx.req.json<IReceive>()
+    const body = await ctx.req.json<IPayReceive>()
     console.log('okkk', body)
 
     try {
       this.logger.log('fetching receive create')
-      const payid = await this.receiveService.create(body.receive, body.value)
+      const payid = await this.receiveService.create(body.text, body.value)
 
       return ctx.json(
         sendResponse(201, 'Pagamento criado com sucesso!', { payid }),
@@ -31,13 +31,13 @@ export class ReceiveController {
   }
 
   findById = async (ctx: Context) => {
-    const paymentId = await ctx.req.param('id')
+    const id = await ctx.req.param('id')
 
     try {
-      this.logger.log(`fetching receive find ID: ${paymentId}`)
-      const payment = await this.receiveService.findById(paymentId)
+      this.logger.log(`fetching receive find ID: ${id}`)
+      const all = await this.receiveService.findById(id)
 
-      return ctx.json(sendResponse(200, 'Pagamento encontrado', payment), 200)
+      return ctx.json(sendResponse(200, 'Pagamento encontrado', all), 200)
     } catch (error) {
       return ctx.json(sendResponse(404, 'Pagamento não encontrado'), 404)
     }
@@ -56,20 +56,16 @@ export class ReceiveController {
   }
 
   update = async (ctx: Context) => {
-    const paymentId = ctx.req.param('id')
+    const id = ctx.req.param('id')
 
-    const body = await ctx.req.json<IReceive>()
+    const body = await ctx.req.json<IPayReceive>()
 
     try {
-      this.logger.log(`fetching receive update ID: ${paymentId}`)
-      const updatedPayment = await this.receiveService.update(
-        paymentId,
-        'completed',
-        body
-      )
+      this.logger.log(`fetching receive update ID: ${id}`)
+      const updated = await this.receiveService.update(id, 'completed', body)
 
       return ctx.json(
-        sendResponse(200, 'Pagamento atualizado com sucesso', updatedPayment),
+        sendResponse(200, 'Pagamento atualizado com sucesso', updated),
         200
       )
     } catch (error) {
@@ -78,11 +74,11 @@ export class ReceiveController {
   }
 
   delete = async (ctx: Context) => {
-    const paymentId = await ctx.req.param('id')
+    const id = await ctx.req.param('id')
 
     try {
-      this.logger.log(`fetching receive delete ID: ${paymentId}`)
-      await this.receiveService.delete(paymentId)
+      this.logger.log(`fetching receive delete ID: ${id}`)
+      await this.receiveService.delete(id)
 
       return ctx.json(sendResponse(200, 'Pagamento deletado com sucesso'), 200)
     } catch (error) {

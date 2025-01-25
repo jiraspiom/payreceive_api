@@ -2,7 +2,7 @@ import { Hono } from 'hono'
 import { ConsoleLogger } from './services/LoggerService.js'
 import { errorHandler } from './middlewares/ErrorHandle.js'
 import { payRouter } from './routes/paymentRoutes.js'
-import { receiveRouter } from './routes/receiptRoutes.js'
+import { recRouter } from './routes/receiptRoutes.js'
 import { cors } from 'hono/cors'
 
 // Instanciar dependências
@@ -23,7 +23,7 @@ app.use(
 )
 
 app.route('/pay', payRouter)
-app.route('/rec', receiveRouter)
+app.route('/rec', recRouter)
 
 app.onError(errorHandler(logger))
 
