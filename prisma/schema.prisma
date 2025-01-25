@@ -29,7 +29,7 @@ model pay {
 }
 
 model receive {
-  id     String   @id @default(uuid())
+  id     String   @id @default(cuid())
   text   String
   value  Int
   date   DateTime @default(now())

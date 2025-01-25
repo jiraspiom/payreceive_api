@@ -7,20 +7,24 @@ import type { IPayReceive } from '../interfaces/IPayReceive.js'
 import { prisma } from '../lib/db.js'
 
 export class PaymentService implements IPaymentService {
-  async create(text: string, value: number): Promise<string> {
-    const data = {
-      text,
-      value,
-      status: Status.completed,
+  async create(text: string, value: number): Promise<string | undefined> {
+    try {
+      const data = {
+        text,
+        value,
+        status: Status.completed,
+      }
+
+      console.log('service opay', data)
+
+      const create = await prisma.pay.create({ data: data })
+
+      console.log('criado', create)
+
+      return create.id
+    } catch (error) {
+      console.error('error?', error)
     }
-
-    console.log('service opay', data)
-
-    const create = await prisma.pay.create({ data: data })
-
-    console.log('criado', create)
-
-    return create.id
   }
 
   async findAll(): Promise<IPayReceive[]> {

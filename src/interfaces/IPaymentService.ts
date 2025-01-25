@@ -6,7 +6,7 @@ export interface PaymentUpdate {
 }
 
 export interface IPaymentService {
-  create(text: string, value: number): Promise<string>
+  create(text: string, value: number): Promise<string | undefined>
 
   findAll(): Promise<IPayReceive[]>
 
