@@ -27,7 +27,10 @@ export class PaymentService implements IPaymentService {
     }
   }
 
-  async findAll(ano?: number, mes?: number): Promise<IPayReceive[]> {
+  async findAll(
+    ano?: number,
+    mes?: number
+  ): Promise<{ data: IPayReceive[]; totalMonth: number }> {
     const whereClause: { date?: { gte?: Date; lt?: Date } } = {}
 
     if (ano !== undefined && mes !== undefined) {
@@ -47,7 +50,9 @@ export class PaymentService implements IPaymentService {
       throw new Error('Pagamentos não encontrado')
     }
 
-    return all
+    const totalMonth = all.reduce((sum, item) => sum + (item.value || 0), 0)
+
+    return { totalMonth, data: all }
   }
 
   async findById(id: string): Promise<IPayReceive> {

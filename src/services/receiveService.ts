@@ -19,7 +19,10 @@ export class ReceiveService implements IReceiveService {
     return create.id
   }
 
-  async findAll(ano?: number, mes?: number): Promise<IPayReceive[]> {
+  async findAll(
+    ano?: number,
+    mes?: number
+  ): Promise<{ data: IPayReceive[]; totalMonth: number }> {
     const whereClause: { date?: { gte?: Date; lt?: Date } } = {}
 
     console.log('ano', ano, 'mes', mes)
@@ -41,7 +44,9 @@ export class ReceiveService implements IReceiveService {
       throw new Error('Recebimentos não encontrado')
     }
 
-    return all
+    const totalMonth = all.reduce((sum, item) => sum + (item.value || 0), 0)
+
+    return { totalMonth, data: all }
   }
 
   async findById(Id: string): Promise<IPayReceive> {

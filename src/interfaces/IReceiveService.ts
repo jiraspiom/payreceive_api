@@ -8,7 +8,10 @@ export interface ReceiveUpdate {
 export interface IReceiveService {
   create(text: string, value: number): Promise<string>
 
-  findAll(ano?: number, mes?: number): Promise<IPayReceive[]>
+  findAll(
+    ano?: number,
+    mes?: number
+  ): Promise<{ data: IPayReceive[]; totalMonth: number }>
 
   findById(id: string): Promise<IPayReceive>
 
