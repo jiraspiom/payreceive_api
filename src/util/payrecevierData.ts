@@ -1,4 +1,3 @@
-import type { IPay, IReceive } from '../interfaces/IPayReceive.js'
+import type { IPayReceive } from '../interfaces/IPayReceive.js'
 
-export const DataPay: IPay[] = []
-export const DataReceive: IReceive[] = []
+export const DataPayReceiive: IPayReceive[] = []
