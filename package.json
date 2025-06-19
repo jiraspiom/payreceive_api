@@ -1,5 +1,5 @@
 {
-  "name": "pay_receive",
+  "name": "payrec_api",
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
