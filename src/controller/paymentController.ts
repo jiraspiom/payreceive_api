@@ -1,7 +1,6 @@
 import { sendResponse } from '../util/apiResponse.js'
 import type { Context } from 'hono'
 import type { IPaymentService } from '../interfaces/IPaymentService.js'
-
 import type { IPayReceive } from '../interfaces/IPayReceive.js'
 import type { ILogger } from '../interfaces/ILogger.js'
 
@@ -16,9 +15,6 @@ export class PaymentController {
 
   create = async (ctx: Context) => {
     const body = await ctx.req.json<IPayReceive>()
-
-    console.log('okkkPag', body)
-
     try {
       this.logger.log('fetching payment create')
       const payid = await this.paymentService.create(body.text, body.value)
@@ -34,12 +30,11 @@ export class PaymentController {
 
   findById = async (ctx: Context) => {
     const id = await ctx.req.param('id')
-
     try {
       this.logger.log(`fetching payment find ID: ${id}`)
-      const payment = await this.paymentService.findById(id)
+      const data = await this.paymentService.findById(id)
 
-      return ctx.json(sendResponse(200, 'Pagamento encontrado', payment), 200)
+      return ctx.json(sendResponse(200, 'Pagamento encontrado', data), 200)
     } catch (error) {
       return ctx.json(sendResponse(404, 'Pagamento não encontrado'), 404)
     }
@@ -53,13 +48,12 @@ export class PaymentController {
 
     try {
       this.logger.log('fetching payment All')
-
-      const all = await this.paymentService.findAll(
+      const data = await this.paymentService.findAll(
         Number(ano) || cDate.getFullYear(),
         Number(mes) || cDate.getMonth() + 1
       )
 
-      return ctx.json(sendResponse(200, 'Pagamento encontrado', all), 200)
+      return ctx.json(sendResponse(200, 'Pagamento encontrado', data), 200)
     } catch (error) {
       return ctx.json(sendResponse(404, 'Pagamento não encontrado'), 404)
     }

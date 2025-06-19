@@ -15,8 +15,6 @@ export class ReceiveController {
 
   create = async (ctx: Context) => {
     const body = await ctx.req.json<IPayReceive>()
-    console.log('okkk', body)
-
     try {
       this.logger.log('fetching receive create')
       const payid = await this.receiveService.create(body.text, body.value)
@@ -32,12 +30,11 @@ export class ReceiveController {
 
   findById = async (ctx: Context) => {
     const id = await ctx.req.param('id')
-
     try {
       this.logger.log(`fetching receive find ID: ${id}`)
-      const all = await this.receiveService.findById(id)
+      const data = await this.receiveService.findById(id)
 
-      return ctx.json(sendResponse(200, 'Pagamento encontrado', all), 200)
+      return ctx.json(sendResponse(200, 'Pagamento encontrado', data), 200)
     } catch (error) {
       return ctx.json(sendResponse(404, 'Pagamento não encontrado'), 404)
     }
@@ -51,13 +48,12 @@ export class ReceiveController {
 
     try {
       this.logger.log(`fetching receive All ${mes} ${ano}`)
-
-      const rec = await this.receiveService.findAll(
+      const data = await this.receiveService.findAll(
         Number(ano) || cDate.getFullYear(),
         Number(mes) || cDate.getMonth() + 1
       )
 
-      return ctx.json(sendResponse(200, 'receitas encontrada', rec), 200)
+      return ctx.json(sendResponse(200, 'receitas encontrada', data), 200)
     } catch (error) {
       return ctx.json(sendResponse(404, 'Recentas não encontradas'), 404)
     }
