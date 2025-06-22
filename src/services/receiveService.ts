@@ -1,22 +1,26 @@
-import { Status } from '@prisma/client'
 import type { IPayReceive } from '../interfaces/IPayReceive.js'
-import { prisma } from '../lib/db.js'
+import prisma from '../lib/db.js'
 import type {
   IReceiveService,
   ReceiveUpdate,
 } from '../interfaces/IReceiveService.js'
+import { Status } from '@prisma/client'
 
 export class ReceiveService implements IReceiveService {
-  async create(text: string, value: number): Promise<string> {
-    const data = {
-      text,
-      value,
-      status: Status.pending,
+  async create(text: string, value: number): Promise<string | undefined> {
+    try {
+      const data = {
+        text,
+        value,
+        status: Status.pending,
+      }
+
+      const create = await prisma.receive.create({ data: data })
+
+      return create.id
+    } catch (error) {
+      console.error('error?', error)
     }
-
-    const create = await prisma.receive.create({ data: data })
-
-    return create.id
   }
 
   async findAll(
@@ -24,8 +28,6 @@ export class ReceiveService implements IReceiveService {
     mes?: number
   ): Promise<{ data: IPayReceive[]; totalMonth: number }> {
     const whereClause: { date?: { gte?: Date; lt?: Date } } = {}
-
-    console.log('ano', ano, 'mes', mes)
 
     if (ano !== undefined && mes !== undefined) {
       whereClause.date = {

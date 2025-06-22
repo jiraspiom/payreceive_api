@@ -1,10 +1,10 @@
-import { Status } from '@prisma/client'
+import type { IPayReceive } from '../interfaces/IPayReceive.js'
+import prisma from '../lib/db.js'
 import type {
   IPaymentService,
   PaymentUpdate,
 } from '../interfaces/IPaymentService.js'
-import type { IPayReceive } from '../interfaces/IPayReceive.js'
-import { prisma } from '../lib/db.js'
+import { Status } from '@prisma/client'
 
 export class PaymentService implements IPaymentService {
   async create(text: string, value: number): Promise<string | undefined> {
@@ -15,11 +15,7 @@ export class PaymentService implements IPaymentService {
         status: Status.completed,
       }
 
-      console.log('service opay', data)
-
       const create = await prisma.pay.create({ data: data })
-
-      console.log('criado', create)
 
       return create.id
     } catch (error) {

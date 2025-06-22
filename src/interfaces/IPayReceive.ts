@@ -1,7 +1,7 @@
 type Valores = {
   id?: string
   value: number
-  status: 'pending' | 'completed' | 'failed'
+  status: string //'pending' | 'completed' | 'failed'
   date?: Date
   updateAt?: Date
 }

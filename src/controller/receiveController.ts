@@ -20,11 +20,14 @@ export class ReceiveController {
       const payid = await this.receiveService.create(body.text, body.value)
 
       return ctx.json(
-        sendResponse(201, 'Pagamento criado com sucesso!', { payid }),
+        sendResponse(201, 'Recebimento criado com sucesso!', { payid }),
         201
       )
     } catch (error) {
-      return ctx.json(sendResponse(500, 'Erro ao criar pagamento'), 500)
+      return ctx.json(
+        sendResponse(500, 'Erro ao criar recebimento', error),
+        500
+      )
     }
   }
 
@@ -34,9 +37,9 @@ export class ReceiveController {
       this.logger.log(`fetching receive find ID: ${id}`)
       const data = await this.receiveService.findById(id)
 
-      return ctx.json(sendResponse(200, 'Pagamento encontrado', data), 200)
+      return ctx.json(sendResponse(200, 'Recebimento encontrado', data), 200)
     } catch (error) {
-      return ctx.json(sendResponse(404, 'Pagamento não encontrado'), 404)
+      return ctx.json(sendResponse(404, 'Recebimento não encontrado'), 404)
     }
   }
 
@@ -69,11 +72,11 @@ export class ReceiveController {
       const updated = await this.receiveService.update(id, 'completed', body)
 
       return ctx.json(
-        sendResponse(200, 'Pagamento atualizado com sucesso', updated),
+        sendResponse(200, 'Recebimento atualizado com sucesso', updated),
         200
       )
     } catch (error) {
-      return ctx.json(sendResponse(500, 'Erro ao atualizar pagamento'), 500)
+      return ctx.json(sendResponse(500, 'Erro ao atualizar recebimento'), 500)
     }
   }
 
@@ -86,7 +89,7 @@ export class ReceiveController {
 
       return ctx.json(sendResponse(200, 'Pagamento deletado com sucesso'), 200)
     } catch (error) {
-      return ctx.json(sendResponse(500, 'Erro ao deletar pagamento'), 500)
+      return ctx.json(sendResponse(500, 'Erro ao deletar recebimento'), 500)
     }
   }
 }

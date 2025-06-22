@@ -6,7 +6,7 @@ export interface ReceiveUpdate {
 }
 
 export interface IReceiveService {
-  create(text: string, value: number): Promise<string>
+  create(text: string, value: number): Promise<string | undefined>
 
   findAll(
     ano?: number,
