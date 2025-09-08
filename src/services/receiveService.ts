@@ -12,14 +12,15 @@ export class ReceiveService implements IReceiveService {
       const data = {
         text,
         value,
-        status: Status.pending,
+        status: Status.completed,
       }
 
       const create = await prisma.receive.create({ data: data })
 
       return create.id
     } catch (error) {
-      console.error('error?', error)
+      console.error('Erro ao criar registro:', error)
+      throw error
     }
   }
 
@@ -46,7 +47,10 @@ export class ReceiveService implements IReceiveService {
       throw new Error('Recebimentos não encontrado')
     }
 
-    const totalMonth = all.reduce((sum, item) => sum + (item.value || 0), 0)
+    const totalMonth = all.reduce(
+      (sum: number, item: IPayReceive) => sum + (item.value || 0),
+      0
+    )
 
     return { totalMonth, data: all }
   }

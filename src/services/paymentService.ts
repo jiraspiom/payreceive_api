@@ -46,7 +46,10 @@ export class PaymentService implements IPaymentService {
       throw new Error('Pagamentos não encontrado')
     }
 
-    const totalMonth = all.reduce((sum, item) => sum + (item.value || 0), 0)
+    const totalMonth = all.reduce(
+      (sum: number, item: IPayReceive) => sum + (item.value || 0),
+      0
+    )
 
     return { totalMonth, data: all }
   }

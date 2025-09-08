@@ -4,6 +4,7 @@ import { errorHandler } from './middlewares/ErrorHandle.js'
 import { payRouter } from './routes/paymentRoutes.js'
 import { recRouter } from './routes/receiptRoutes.js'
 import { cors } from 'hono/cors'
+import { teste } from './routes/teste.js'
 
 // Instanciar dependências
 const logger = new ConsoleLogger()
@@ -24,6 +25,7 @@ app.use(
 
 app.route('/pay', payRouter)
 app.route('/rec', recRouter)
+app.route('/teste', teste)
 
 app.onError(errorHandler(logger))
 

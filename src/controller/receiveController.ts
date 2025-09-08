@@ -5,8 +5,8 @@ import type { IPayReceive } from '../interfaces/IPayReceive.js'
 import type { IReceiveService } from '../interfaces/IReceiveService.js'
 
 export class ReceiveController {
-  private receiveService: IReceiveService
-  private logger: ILogger
+  private readonly receiveService: IReceiveService
+  private readonly logger: ILogger
 
   constructor(receiveService: IReceiveService, logger: ILogger) {
     this.receiveService = receiveService
@@ -32,20 +32,20 @@ export class ReceiveController {
   }
 
   findById = async (ctx: Context) => {
-    const id = await ctx.req.param('id')
+    const id = ctx.req.param('id')
     try {
       this.logger.log(`fetching receive find ID: ${id}`)
       const data = await this.receiveService.findById(id)
 
       return ctx.json(sendResponse(200, 'Recebimento encontrado', data), 200)
-    } catch (error) {
+    } catch {
       return ctx.json(sendResponse(404, 'Recebimento não encontrado'), 404)
     }
   }
 
   findAll = async (ctx: Context) => {
-    const mes = await ctx.req.query('mes')
-    const ano = await ctx.req.query('ano')
+    const mes = ctx.req.query('mes')
+    const ano = ctx.req.query('ano')
 
     const cDate = new Date()
 
@@ -57,8 +57,8 @@ export class ReceiveController {
       )
 
       return ctx.json(sendResponse(200, 'receitas encontrada', data), 200)
-    } catch (error) {
-      return ctx.json(sendResponse(404, 'Recentas não encontradas'), 404)
+    } catch {
+      return ctx.json(sendResponse(404, 'Receintas não encontradas'), 404)
     }
   }
 
@@ -75,20 +75,20 @@ export class ReceiveController {
         sendResponse(200, 'Recebimento atualizado com sucesso', updated),
         200
       )
-    } catch (error) {
+    } catch {
       return ctx.json(sendResponse(500, 'Erro ao atualizar recebimento'), 500)
     }
   }
 
   delete = async (ctx: Context) => {
-    const id = await ctx.req.param('id')
+    const id = ctx.req.param('id')
 
     try {
       this.logger.log(`fetching receive delete ID: ${id}`)
       await this.receiveService.delete(id)
 
       return ctx.json(sendResponse(200, 'Pagamento deletado com sucesso'), 200)
-    } catch (error) {
+    } catch {
       return ctx.json(sendResponse(500, 'Erro ao deletar recebimento'), 500)
     }
   }
