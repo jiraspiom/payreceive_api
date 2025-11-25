@@ -1,0 +1,37 @@
+// generator client {
+//   provider = "prisma-client-js"
+//   // output   = "../src/generated/prisma"
+// }
+
+// datasource db {
+//   provider = "mongodb"
+//   url      = env("DATABASE_URL")
+// }
+
+// enum Status {
+//   pending
+//   completed
+//   failed
+// }
+
+// model pay {
+//   id     String   @id @default(auto()) @map("_id") @db.ObjectId
+//   text   String
+//   value  Int
+//   date   DateTime @default(now())
+//   status Status   @default(completed)
+
+//   createdAt DateTime  @default(now())
+//   updatedAt DateTime?
+// }
+
+// model receive {
+//   id     String   @id @default(auto()) @map("_id") @db.ObjectId
+//   text   String
+//   value  Int
+//   date   DateTime @default(now())
+//   status Status   @default(completed)
+
+//   createdAt DateTime  @default(now())
+//   updatedAt DateTime?
+// }
