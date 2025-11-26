@@ -20,7 +20,7 @@ enum Status {
 }
 
 model pay {
-  id     String   @id @default(uuid())
+  id     String   @id @default(uuidv7())
   text   String
   value  Int
   date   DateTime @default(now())
@@ -31,7 +31,7 @@ model pay {
 }
 
 model receive {
-  id     String   @id @default(uuid())
+  id     String   @id @default(uuidv7())
   text   String
   value  Int
   date   DateTime @default(now())

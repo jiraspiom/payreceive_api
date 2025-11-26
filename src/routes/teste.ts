@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import prisma from '../lib/db.js'
+import { prisma } from '../lib/prisma.js'
 
 const teste = new Hono()
 

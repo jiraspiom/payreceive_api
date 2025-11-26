@@ -1,10 +1,10 @@
+import { Status } from '../generated/prisma/enums.js'
+import { prisma } from '../lib/prisma.js'
 import type { IPayReceive } from '../interfaces/IPayReceive.js'
-import prisma from '../lib/db.js'
 import type {
   IReceiveService,
   ReceiveUpdate,
 } from '../interfaces/IReceiveService.js'
-import { Status } from '@prisma/client'
 
 export class ReceiveService implements IReceiveService {
   async create(text: string, value: number): Promise<string | undefined> {
