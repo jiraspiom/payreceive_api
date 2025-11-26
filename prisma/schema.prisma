@@ -6,9 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DATABASE_URL")
+  provider = "postgresql"
 }
 
 enum Status {
@@ -20,7 +18,7 @@ enum Status {
 model pay {
   id     String   @id @default(cuid())
   text   String
-  value  Int
+  value  Decimal
   date   DateTime @default(now())
   status Status
 
@@ -31,7 +29,7 @@ model pay {
 model receive {
   id     String   @id @default(cuid())
   text   String
-  value  Int
+  value  Decimal
   date   DateTime @default(now())
   status Status
 
